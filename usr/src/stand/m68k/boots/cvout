@@ -1,0 +1,24 @@
+if [ $1 = -s ]
+then
+	flag=-b
+	shift
+else
+	flag=
+fi
+if [ $# != 2 ]
+then
+	/bin/echo "Usage cvout [-s] filein fileout" >&2
+	exit 1
+fi
+if conv $flag $1
+then	/bin/mv `basename $1`.v $2
+	if [ "$flag" = -b ]
+	then
+		/bin/chmod 664 $2
+	else
+		/bin/chmod 775 $2
+	fi
+	exit 0
+fi
+echo "cvout: conv failed"
+exit 1

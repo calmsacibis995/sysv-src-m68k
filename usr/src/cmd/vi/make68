@@ -1,0 +1,26 @@
+# @(#)make68	2.1	
+# shell script to make ex/vi on the vax for the m68k
+# $1 == compile/link/install; $2 == installation root directory
+#
+echo "First, make the vax-resident utilities:  mkstr and xstr"
+. dovax
+(cd misc; cc -o mkstr mkstr.c; cc -o xstr xstr.c)
+#
+echo "Now, make ex/vi for the m68k"
+. do68
+case $1 in
+	compile)	make -f vi.mk clean clobber libtermlib termcap src cmd
+				;;
+	link)		make -f vi.mk clobber libtermlib termcap src cmd
+				;;
+	install)	conv vax/ex; mv ex.v ex
+				conv vax/ex3.7recover; mv ex3.7recover.v ex3.7recover
+				conv vax/ex3.7preserve; mv ex3.7preserv.v ex3.7preserve
+				conv termlib/termcap.a; mv termcap.a.v termcap.a
+				conv misc/strings; mv strings.v strings
+				conv misc/ctags; mv ctags.v ctags
+				conv misc/fold; mv fold.v fold
+				make -f vi.mk install clobber TESTDIR=.. OL=$2
+				echo DONT FORGET TO RUN setuid
+				;;
+esac

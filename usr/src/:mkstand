@@ -1,0 +1,19 @@
+#	@(#):mkstand	2.1.1.1	
+# make UNIX standalone libraries and commands
+if /bin/vax
+	then	cd /usr/src/lib/lib2
+		make -f lib2.mk SYS=VAX install clobber
+		cd /usr/src/stand/vax
+		make -f vax.mk install clobber
+	elif /bin/pdp11
+	then
+		cd /usr/src/lib/lib2
+		make -f lib2.mk SYS=PDP install clobber
+		cd /usr/src/stand/pdp11
+		make -f pdp11.mk install clobber
+	elif /bin/m68k
+	then
+		:
+	else
+		echo Unknown Processor
+fi

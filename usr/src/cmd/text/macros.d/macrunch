@@ -1,0 +1,78 @@
+#	macros crunch procedure
+#
+# SCCS: @(#)macrunch	2.1	
+
+move=n
+roff=
+pname=
+name=
+BIN=/usr/bin
+LIB=/usr/lib
+
+if [ $# -lt 1 ]
+	then echo usage: macrunch [-m] [-d BIN LIB] [{-n _o_r -t} "package name"] ".src name" 
+	exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+    case $1 in
+
+	-m)	move=y;;
+	-n)	roff=n; pname=$2; shift;;
+	-t)	roff=t; pname=$2; shift;;
+	-d)	BIN=$2; LIB=$3; shift;;
+	*)	name=$1;;
+
+    esac
+    shift
+done
+
+rm -f NOCOMPACT${name}
+
+sed -e "3,\${
+		/^''*\\\\\"/d
+		s/	*\\\\\".*//
+		s/@//g
+		s/^\(['.]\)[ 	]*/\1/
+		s/^\\([.'][a-z][a-z]\\)  */\\1/
+		s/\\\\{[ 	]*/\\\\{/g
+		s/<<name>>/${name}/g
+	    } " \
+	${name}.src | ./ntar -h "'''>S>" -t "'''>E>" -g  >  ${name}
+
+if [ -r NOCOMPACT${name} ]
+then
+	if [ -n "${roff}" ]
+	then
+		mv NOCOMPACT${name} ucmp.${roff}.${pname}
+		/usr/bin/${roff}roff -kTMP ${name} - <<!
+.co
+!
+		mv d.TMP cmp.${roff}.d.${pname}
+		mv t.TMP cmp.${roff}.t.${pname}
+		cat ucmp.${roff}.${pname} >> ${name}
+		if [ $move = "y" ]
+		then
+		    cp cmp.${roff}.[dt].${pname} ucmp.${roff}.${pname} ${LIB}/macros
+		    ( cd ${LIB}/macros
+			chmod 644 cmp.${roff}.[dt].${pname} ucmp.${roff}.${pname} )
+			( cd ${LIB}/macros
+			  chgrp bin cmp.${roff}.[dt].${pname} ucmp.${roff}.${pname}
+			  chown bin cmp.${roff}.[dt].${pname} ucmp.${roff}.${pname} )
+			else true
+		fi
+	else
+		cat NOCOMPACT${name} >> ${name}
+		rm NOCOMPACT${name}
+	fi
+fi
+
+if [ $move = "y" ] 
+then
+	cp ${name} ${LIB}/macros
+	chmod 644 ${LIB}/macros/${name}
+	chgrp bin ${LIB}/macros/${name}
+	chown bin ${LIB}/macros/${name}
+	rm -f ${name}
+fi

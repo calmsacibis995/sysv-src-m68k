@@ -1,0 +1,35 @@
+#	@(#):mkuts	2.1.1.2	
+
+: make UNIX libraries and initial systems
+
+if /bin/vax
+then
+	cd /usr/src/uts/vax/cf
+	for i in gdgt gdts
+	do
+		config $i
+		make install SYS=unix NODE=unix REL=sysV VER=$i
+	done
+elif /bin/pdp11
+then
+	cd /usr/src/uts/pdp11/cf
+	for i in gdht gdtm rpht rptm
+	do
+		config $i
+		make install SYS=unix NODE=unix REL=sysV VER=$i
+	done
+elif /bin/u3b
+then
+	cd /usr/src/uts/3b/cf
+	for i in system.32 system.52
+	do
+		config /etc/$i
+		make install SYS=unix NODE=unix REL=sysV VER=$i
+	done
+elif /bin/m68k
+then
+	cd /usr/src/uts/m68k/cf
+	make install SYS=unix NODE=unix REL=sysV/68 VER=16 DFOPTS="-DREL -DVAM=2 -DDSK=1 -DDSK01=UDFRC1 -DNSWAP=6583"
+	rm -f dfile master
+	make install SYS=unix NODE=unix REL=sysV/68 VER=80 DFOPTS="-DREL -DVAM=2 -DDSK=1 -DDSK01=UDFRC3 -DNSWAP=13167"
+fi

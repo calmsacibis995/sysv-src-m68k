@@ -1,0 +1,46 @@
+#	@(#)liby.rc	2.1.1.1 
+#	Make a new Yacc library
+
+ROOT=${ROOT}
+INSDIR=${ROOT}/usr/lib
+PROT=${PROT-0666}
+OWN=${OWN-bin}
+GRP=${GRP-bin}
+
+SFLAGS=-r
+if pdp11
+then
+	SFLAGS=
+fi
+
+ARSTRIP=s
+
+cc -O -c *.c
+
+chmod $PROT *.o
+chgrp $GRP  *.o
+chown $OWN  *.o
+
+ar qv liby.a *.o
+strip $SFLAGS liby.a
+ar t$ARSTRIP liby.a
+
+rm *.o
+
+if test -f ${INSDIR}/liby.a
+then
+	rm -f ${INSDIR}/OLDliby.a
+	cp ${INSDIR}/liby.a ${INSDIR}/OLDliby.a
+	chmod ${PROT} ${INSDIR}/OLDliby.a
+	chmod -x ${INSDIR}/OLDliby.a
+	chgrp ${GRP} ${INSDIR}/OLDliby.a
+	chown ${OWN} ${INSDIR}/OLDliby.a
+fi
+
+rm -f ${INSDIR}/liby.a
+cp liby.a ${INSDIR}/liby.a
+chmod $PROT ${INSDIR}/liby.a
+chmod -x ${INSDIR}/liby.a
+chgrp $GRP ${INSDIR}/liby.a
+chown $OWN ${INSDIR}/liby.a
+rm -f liby.a

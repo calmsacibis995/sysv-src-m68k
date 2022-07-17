@@ -1,0 +1,8 @@
+	To install the two bootloader modules into a new 1024 byte block 
+	file system (bootable 512 byte systems are not supported),
+	execute:
+		make -f boots.mk UDDEV=special udinstall
+	where "special" is the raw disk device to be made bootable.
+	The CMD based root file system is bootable as distributed
+	and is expected to reside on special device /dev/rdk00 or /dev/rdk10.
+

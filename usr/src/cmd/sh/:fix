@@ -1,0 +1,13 @@
+# @(#):fix	2.1	
+#	3.0 SID #	1.1
+for i do
+	cc -O -S $i.c
+	ed - <<\! $i.s 
+	g/^[	 ]*\.data/s/data/text/
+	g/^[	 ]*data/s/data/text/
+	w
+	q
+!
+	as -o $i.o $i.s
+	rm $i.s
+done

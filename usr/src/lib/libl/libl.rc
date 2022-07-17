@@ -1,0 +1,63 @@
+#	@(#)libl.rc	2.1.1.1 
+
+ROOT=${ROOT}
+PROT=${PROT-0666}
+OWN=${OWN-bin}
+GRP=${GRP-bin}
+INSDIR=${ROOT}/usr/lib
+
+rm -f lib/*.o
+cc -O -c lib/*.c
+chmod $PROT *.o
+chgrp $GRP  *.o
+chown $OWN  *.o
+rm -f libl.a
+ar rv libl.a *.o
+rm -f *.o
+
+if test -f ${INSDIR}/libl.a
+then
+	rm -f ${INSDIR}/OLDlibl.a
+	cp ${INSDIR}/libl.a ${INSDIR}/OLDlibl.a
+	chmod ${PROT} ${INSDIR}/OLDlibl.a
+	chmod -x ${INSDIR}/OLDlibl.a
+	chgrp ${GRP} ${INSDIR}/OLDlibl.a
+	chown ${OWN} ${INSDIR}/OLDlibl.a
+fi
+if test -f ${INSDIR}/lex/ncform
+then
+	rm -f ${INSDIR}/lex/OLDncform
+	cp ${INSDIR}/lex/ncform ${INSDIR}/lex/OLDncform
+	chmod ${PROT} ${INSDIR}/lex/OLDncform
+	chmod -x ${INSDIR}/lex/OLDncform
+	chgrp ${GRP} ${INSDIR}/lex/OLDncform
+	chown ${OWN} ${INSDIR}/lex/OLDncform
+fi
+if test -f ${INSDIR}/lex/nrform
+then
+	rm -f ${INSDIR}/lex/OLDnrform
+	cp ${INSDIR}/lex/nrform ${INSDIR}/lex/OLDnrform
+	chmod ${PROT} ${INSDIR}/lex/OLDnrform
+	chmod -x ${INSDIR}/lex/OLDnrform
+	chgrp ${GRP} ${INSDIR}/lex/OLDnrform
+	chown ${OWN} ${INSDIR}/lex/OLDnrform
+fi
+rm -f ${INSDIR}/libl.a ${INSDIR}/lex/ncform ${INSDIR}/lex/nrform
+cp libl.a ${ROOT}/usr/lib
+chmod $PROT ${ROOT}/usr/lib/libl.a
+chmod -x ${ROOT}/usr/lib/libl.a
+chgrp $GRP ${ROOT}/usr/lib/libl.a
+chown $OWN ${ROOT}/usr/lib/libl.a
+rm -f libl.a
+
+cp lib/ncform ${ROOT}/usr/lib/lex/ncform
+chmod $PROT ${ROOT}/usr/lib/lex/ncform
+chmod -x ${ROOT}/usr/lib/lex/ncform
+chgrp $GRP ${ROOT}/usr/lib/lex/ncform
+chown $OWN ${ROOT}/usr/lib/lex/ncform
+
+cp lib/nrform ${ROOT}/usr/lib/lex/nrform
+chmod $PROT ${ROOT}/usr/lib/lex/nrform
+chmod -x ${ROOT}/usr/lib/lex/nrform
+chgrp $GRP ${ROOT}/usr/lib/lex/nrform
+chown $OWN ${ROOT}/usr/lib/lex/nrform

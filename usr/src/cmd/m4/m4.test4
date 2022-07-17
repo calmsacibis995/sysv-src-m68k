@@ -1,0 +1,9 @@
+dnl 	@(#)m4.test4	2.1	
+aaaaa
+divert(1)
+1111111
+divert
+divert(-1)
+undivert
+divert
+zzzzz

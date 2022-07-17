@@ -1,0 +1,4 @@
+g/^[ 	]*\.data/s/data/text/
+w
+q
+# @(#):rofix	2.1	

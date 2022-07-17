@@ -1,0 +1,59 @@
+#	@(#):mksyshead	2.1.1.1	
+
+cd /usr/include
+mkdir sys
+if vax
+then
+	mkdir vax vax/sys
+	sys=vax
+elif pdp11
+then
+	mkdir pdp11 pdp11/sys
+	sys=pdp11
+elif m68k
+then
+	mkdir m68k m68k/sys
+	sys=m68k
+fi
+chgrp bin sys $sys $sys/sys
+chown bin sys $sys $sys/sys
+chmod 775 sys $sys $sys/sys
+
+cd ${SRC:=/usr/src}/uts/sys
+rm -f sys.mk
+ls > sys.mk
+chmod 664 sys.mk
+chown bin sys.mk
+chgrp bin sys.mk
+ed - sys.mk <<!
+g/sys\.mk/d
+1,\$s:.*:cp & /usr/include/sys; ln /usr/include/sys/& /usr/include/$sys/sys:
+0a
+all:
+.
+w
+q
+!
+make -f sys.mk
+
+cd ${SRC:=/usr/src}/uts/$sys/sys
+rm -f $sys.mk
+ls > $sys.mk
+chmod 664 $sys.mk
+chown bin $sys.mk
+chgrp bin $sys.mk
+ed - $sys.mk <<!
+g/$sys.mk/d
+1,\$s:.*:cp & /usr/include/$sys/sys; ln /usr/include/$sys/sys/& /usr/include/sys:
+0a
+all:
+.
+w
+q
+!
+make -f $sys.mk
+
+cd /usr/include
+chgrp bin sys/* $sys/sys/*
+chown bin sys/* $sys/sys/*
+chmod 664 sys/* $sys/sys/*

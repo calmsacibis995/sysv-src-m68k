@@ -1,0 +1,57 @@
+# @(#)try	2.1 
+ed  ex_cmds2.c << '-*-END-*-'
+529a
+		*/
+.
+527a
+		tostop();
+		/* replaced by the ostop above
+.
+509a
+			*/
+.
+507a
+			tostart();
+			/* replaced by ostart.
+.
+506c
+		if (Peekkey != ':') {
+.
+381c
+	return (endcmd(peekchar()) && peekchar() != '"');
+.
+279a
+		case '"':
+			comment();
+			setflav();
+			return;
+
+.
+234a
+	isalt = (strcmp(altfile, args)==0) + 1;
+.
+230a
+	extern short isalt;	/* defined in ex_io.c */
+.
+161c
+	inappend = inglobal = 0;
+.
+136a
+		*/
+.
+134a
+		/* ostop should be doing this
+.
+121,124d
+104a
+	if (laste) {
+		laste = 0;
+		sync();
+	}
+.
+41a
+	case '"':
+.
+w
+q
+'-*-END-*-'

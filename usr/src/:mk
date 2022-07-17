@@ -1,0 +1,8 @@
+#	@(#):mk	2.1.1.2	
+./:mkhead
+./:mksyshead
+./:mklib libc
+./:mkcmd $* cc
+./:mklib \*
+./:mkcmd $* \*
+./:mkstand

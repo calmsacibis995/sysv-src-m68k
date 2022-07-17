@@ -1,0 +1,7 @@
+#	@(#):rofix	2.1	
+#	@(#):rofix	1.1
+ed $1 <<!
+g/^[ 	]*\.data/s/data/text/
+w
+q
+!

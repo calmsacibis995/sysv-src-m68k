@@ -1,0 +1,43 @@
+#	@(#):mklib	2.1	
+ROOT=$ROOT
+OWN=${OWN-bin}
+GRP=${GRP-bin}
+PROT=${PROT-664}
+SRCRT=${SRCRT-/usr/src/lib}	# for libplot
+OL=${OL}			# for libplot
+INS=${INS-:}			# for libplot
+source=${SRC-/usr/src}
+cd ${source}/lib
+opt=""
+for A in $*
+do
+	NAME= TEST=./
+	B=`echo $A ^ sed -e 's/.*\///' `
+	i=$B
+	if [ -d $i ]
+	then (
+		echo ======== $i
+		cd $i
+		if [ -f $i.mk  ]
+		then
+			if make -b -f $i.mk ROOT="$ROOT" INCROOT="$INCROOT" \
+				OWN="$OWN" GRP="$GRP" PROT="$PROT" install \
+				SRCRT="$SRCRT" OL="$OL" INS="$INS" \
+				I="/etc/install -i -n $ROOT/lib $ROOT/usr/lib"
+			then
+				make -b -f $i.mk clobber
+			else
+				echo MAKE ERROR
+			fi
+			rm -f *.o
+		elif [ -f $i.rc ]
+		then
+			cmd=`echo "./$i.rc $opt"`
+			sh $cmd
+		else
+			echo XXXXXXXX Do Not Know How to MAKE $B
+		fi
+	) else
+		opt=`echo $i $opt`
+	fi
+done
